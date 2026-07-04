@@ -1,0 +1,20 @@
+# Temporary cloned repos and working files
+tmp_repos/
+*.map
+fixed_*.map
+*.png
+
+# Except images inside ddnet/, unique/, and kog/
+!ddnet/**/*.png
+!unique/**/*.png
+!kog/**/*.png
+
+# Cargo & Rust build artifacts
+target/
+twgpu/
+twmap/
+bin/
+
+# Environment / OS
+.DS_Store
+Thumbs.db
