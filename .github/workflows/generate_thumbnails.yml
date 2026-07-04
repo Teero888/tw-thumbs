@@ -51,7 +51,7 @@ jobs:
       - name: Install System Dependencies for Headless Rendering
         run: |
           sudo apt-get update
-          sudo apt-get install -y libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb libegl1-mesa python3
+          sudo apt-get install -y libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb libgl1 python3
 
       - name: Cache Built Binaries
         id: cache-binaries
