@@ -53,9 +53,24 @@ def get_git_head_sha(repo_dir):
     return None
 
 
+def render_with_twgpu(twgpu_bin, map_path, work_dir, resolution, stem):
+    """Helper to run twgpu and look for any variation of the generated image."""
+    cmd = [str(twgpu_bin), str(map_path), "-r", resolution]
+    run_cmd(cmd, cwd=work_dir)
+    
+    # Check possible filename patterns produced by twgpu
+    patterns = [f"{stem}_{resolution}.png", f"{stem}.png", f"{stem}_fixed_{resolution}.png", f"{stem}_fixed.png"]
+    for pattern in patterns:
+        img_path = Path(work_dir) / pattern
+        if img_path.exists():
+            return img_path
+    return None
+
+
 def render_single_map(map_path, output_png_path, twgpu_bin, twmap_bin, resolution):
     """
-    Renders a single map using twgpu-map-photography, falling back to twmap-fix if needed.
+    Renders a single map. If direct rendering fails, it fixes the map exactly once
+    and makes exactly one retry attempt before giving up.
     """
     output_png_path = Path(output_png_path)
     output_png_path.parent.mkdir(parents=True, exist_ok=True)
@@ -65,38 +80,22 @@ def render_single_map(map_path, output_png_path, twgpu_bin, twmap_bin, resolutio
         map_path_abs = Path(map_path).resolve()
         map_stem = map_path_abs.stem
 
-        # Step 1: Try rendering directly with twgpu-map-photography
-        # Command format: twgpu-map-photography <map_path> -r <resolution>
-        cmd = [str(twgpu_bin), str(map_path_abs), "-r", resolution]
-        res = run_cmd(cmd, cwd=work_dir)
+        # Try 1: Direct render
+        generated_png = render_with_twgpu(twgpu_bin, map_path_abs, work_dir, resolution, map_stem)
 
-        # twgpu-map-photography outputs mapstem_1280x720.png or mapstem.png
-        generated_png = work_path / f"{map_stem}_{resolution}.png"
-        if not generated_png.exists():
-            generated_png = work_path / f"{map_stem}.png"
-
-        # Step 2: If rendering failed or PNG was not produced, try twmap-fix
-        if res.returncode != 0 or not generated_png.exists():
-            print(f"[FIX] Direct render failed for {map_path_abs.name}, trying twmap-fix...")
+        # Try 2: Fix once and retry once if Try 1 failed
+        if not generated_png:
+            print(f"[FIX] Direct render failed for {map_path_abs.name}. Attempting twmap-fix...")
             fixed_map_path = work_path / f"{map_stem}_fixed.map"
             fix_cmd = [str(twmap_bin), str(map_path_abs), str(fixed_map_path)]
             fix_res = run_cmd(fix_cmd, cwd=work_dir)
 
             if fix_res.returncode == 0 and fixed_map_path.exists():
-                print(f"[RETRY] Retrying twgpu-map-photography on fixed map for {map_path_abs.name}...")
-                retry_cmd = [str(twgpu_bin), str(fixed_map_path), "-r", resolution]
-                retry_res = run_cmd(retry_cmd, cwd=work_dir)
+                print(f"[RETRY] Retrying render on fixed map for {map_path_abs.name}...")
+                generated_png = render_with_twgpu(twgpu_bin, fixed_map_path, work_dir, resolution, map_stem)
 
-                generated_png = work_path / f"{map_stem}_fixed_{resolution}.png"
-                if not generated_png.exists():
-                    generated_png = work_path / f"{map_stem}_fixed.png"
-                if not generated_png.exists():
-                    generated_png = work_path / f"{map_stem}_{resolution}.png"
-                if not generated_png.exists():
-                    generated_png = work_path / f"{map_stem}.png"
-
-        # Step 3: If PNG was created, move it to the output destination
-        if generated_png.exists():
+        # Save result if successful
+        if generated_png and generated_png.exists():
             shutil.copy2(generated_png, output_png_path)
             print(f"[SUCCESS] Rendered {map_path_abs.name} -> {output_png_path}")
             return True
@@ -126,7 +125,6 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state)
     current_sha = get_git_head_sha(clone_dir)
     print(f"Current HEAD commit SHA for {repo_name}: {current_sha}")
 
-    # Find all .map files in the repo
     map_files = sorted(list(clone_dir.glob("**/*.map")))
     print(f"Found {len(map_files)} map files in {repo_name}.")
 
@@ -137,7 +135,7 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state)
     tasks = []
     with ThreadPoolExecutor(max_workers=args.jobs) as executor:
         for map_file in map_files:
-            # Flatten path: force output to be immediately under target_dir as <mapname>.png
+            # Flattened structural target path containing only <mapname>.png
             output_png_path = target_dir / f"{map_file.stem}.png"
 
             if output_png_path.exists() and not args.force:
