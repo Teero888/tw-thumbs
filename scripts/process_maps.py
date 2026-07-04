@@ -98,10 +98,6 @@ def render_single_map(map_path, output_png_path, twgpu_bin, twmap_bin, resolutio
         # Step 3: If PNG was created, move it to the output destination
         if generated_png.exists():
             shutil.copy2(generated_png, output_png_path)
-            # Also save with resolution suffix if requested
-            res_png_path = output_png_path.parent / f"{map_stem}_{resolution}.png"
-            if res_png_path != output_png_path:
-                shutil.copy2(generated_png, res_png_path)
             print(f"[SUCCESS] Rendered {map_path_abs.name} -> {output_png_path}")
             return True
         else:
@@ -141,10 +137,8 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state)
     tasks = []
     with ThreadPoolExecutor(max_workers=args.jobs) as executor:
         for map_file in map_files:
-            rel_path = map_file.relative_to(clone_dir)
-            # Replace .map extension with .png for the output thumbnail
-            output_rel_png = rel_path.with_suffix(".png")
-            output_png_path = target_dir / output_rel_png
+            # Flatten path: force output to be immediately under target_dir as <mapname>.png
+            output_png_path = target_dir / f"{map_file.stem}.png"
 
             if output_png_path.exists() and not args.force:
                 skipped_count += 1
@@ -218,7 +212,6 @@ def main():
     twgpu_bin = root_dir / args.twgpu_bin if not Path(args.twgpu_bin).is_absolute() else Path(args.twgpu_bin)
     twmap_bin = root_dir / args.twmap_bin if not Path(args.twmap_bin).is_absolute() else Path(args.twmap_bin)
 
-    # Fallback to bin/ directory if target/release path does not exist
     if not twgpu_bin.exists() and (root_dir / "bin" / "twgpu-map-photography").exists():
         twgpu_bin = root_dir / "bin" / "twgpu-map-photography"
     if not twmap_bin.exists() and (root_dir / "bin" / "twmap-fix").exists():
