@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """
 Thumbnail generator for DDNet, Unique, and KoG map repositories using twgpu-map-photography and twmap-fix.
+Generates JSON endpoints for thumbnail indexing.
 """
 
 import argparse
+import datetime
 import json
 import os
 import shutil
@@ -135,7 +137,7 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state)
     tasks = []
     with ThreadPoolExecutor(max_workers=args.jobs) as executor:
         for map_file in map_files:
-            # Flattened structural target path containing only <mapname>.png
+            # Target path containing <mapname>.png
             output_png_path = target_dir / f"{map_file.stem}.png"
 
             if output_png_path.exists() and not args.force:
@@ -167,6 +169,53 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state)
     print(f"Summary for {repo_name}: Rendered: {rendered_count}, Skipped: {skipped_count}, Failed: {failed_count}")
     if current_sha:
         state[repo_name] = current_sha
+
+
+def build_api_manifest(root_dir, resolution):
+    """Generates maps.json and api/maps.json JSON endpoints for indexing."""
+    api_dir = root_dir / "api"
+    api_dir.mkdir(parents=True, exist_ok=True)
+
+    manifest = {
+        "updated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "resolution": resolution,
+        "counts": {},
+        "maps": {},
+    }
+
+    flat_list = []
+    total = 0
+
+    for repo in ["ddnet", "unique", "kog"]:
+        repo_dir = root_dir / repo
+        if not repo_dir.exists():
+            manifest["counts"][repo] = 0
+            manifest["maps"][repo] = []
+            continue
+
+        png_files = sorted([p.stem for p in repo_dir.glob("*.png")])
+        manifest["counts"][repo] = len(png_files)
+        manifest["maps"][repo] = png_files
+        total += len(png_files)
+
+        for m_name in png_files:
+            flat_list.append({
+                "name": m_name,
+                "repo": repo,
+                "path": f"{repo}/{m_name}.png",
+            })
+
+    manifest["counts"]["total"] = total
+
+    # Write root maps.json
+    with open(root_dir / "maps.json", "w") as f:
+        json.dump(manifest, f, indent=2)
+
+    # Write api/maps.json
+    with open(api_dir / "maps.json", "w") as f:
+        json.dump(flat_list, f, indent=2)
+
+    print(f"\n[API] Manifest generated: {total} total thumbnails indexed in maps.json and api/maps.json.")
 
 
 def main():
@@ -250,6 +299,8 @@ def main():
 
     with open(state_path, "w") as f:
         json.dump(state, f, indent=2)
+
+    build_api_manifest(root_dir, args.resolution)
 
     print("\nAll map processing finished.")
 
