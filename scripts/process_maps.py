@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Thumbnail generator for DDNet, Unique, and KoG map repositories using twgpu-map-photography and twmap-fix.
-Generates JSON endpoints for thumbnail indexing.
+Generates JSON endpoints containing map relative paths and thumbnail relative paths.
+Ignores duplicate directories like maps7 in unique-maps.
 """
 
 import argparse
@@ -106,7 +107,7 @@ def render_single_map(map_path, output_png_path, twgpu_bin, twmap_bin, resolutio
             return False
 
 
-def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state):
+def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state, repo_map_data):
     target_dir = root_dir / config["dir"]
     target_dir.mkdir(parents=True, exist_ok=True)
 
@@ -128,7 +129,25 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state)
     print(f"Current HEAD commit SHA for {repo_name}: {current_sha}")
 
     map_files = sorted(list(clone_dir.glob("**/*.map")))
+
+    # Completely ignore duplicate maps7 directory in unique-maps repo
+    if repo_name == "unique":
+        map_files = [m for m in map_files if "maps7" not in m.relative_to(clone_dir).parts]
+
     print(f"Found {len(map_files)} map files in {repo_name}.")
+
+    # Collect map repository relative paths and thumbnail relative paths
+    map_list = []
+    for map_file in map_files:
+        rel_map_path = str(map_file.relative_to(clone_dir))
+        thumb_path = f"{repo_name}/{map_file.stem}.png"
+        map_list.append({
+            "name": map_file.stem,
+            "repo": repo_name,
+            "map_path": rel_map_path,
+            "thumbnail_path": thumb_path,
+        })
+    repo_map_data[repo_name] = map_list
 
     rendered_count = 0
     skipped_count = 0
@@ -137,7 +156,6 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state)
     tasks = []
     with ThreadPoolExecutor(max_workers=args.jobs) as executor:
         for map_file in map_files:
-            # Target path containing <mapname>.png
             output_png_path = target_dir / f"{map_file.stem}.png"
 
             if output_png_path.exists() and not args.force:
@@ -171,8 +189,8 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state)
         state[repo_name] = current_sha
 
 
-def build_api_manifest(root_dir, resolution):
-    """Generates maps.json and api/maps.json JSON endpoints for indexing."""
+def build_api_manifest(root_dir, resolution, repo_map_data):
+    """Generates maps.json and api/maps.json JSON endpoints."""
     api_dir = root_dir / "api"
     api_dir.mkdir(parents=True, exist_ok=True)
 
@@ -187,23 +205,11 @@ def build_api_manifest(root_dir, resolution):
     total = 0
 
     for repo in ["ddnet", "unique", "kog"]:
-        repo_dir = root_dir / repo
-        if not repo_dir.exists():
-            manifest["counts"][repo] = 0
-            manifest["maps"][repo] = []
-            continue
-
-        png_files = sorted([p.stem for p in repo_dir.glob("*.png")])
-        manifest["counts"][repo] = len(png_files)
-        manifest["maps"][repo] = png_files
-        total += len(png_files)
-
-        for m_name in png_files:
-            flat_list.append({
-                "name": m_name,
-                "repo": repo,
-                "path": f"{repo}/{m_name}.png",
-            })
+        map_entries = repo_map_data.get(repo, [])
+        manifest["counts"][repo] = len(map_entries)
+        manifest["maps"][repo] = map_entries
+        total += len(map_entries)
+        flat_list.extend(map_entries)
 
     manifest["counts"]["total"] = total
 
@@ -215,7 +221,7 @@ def build_api_manifest(root_dir, resolution):
     with open(api_dir / "maps.json", "w") as f:
         json.dump(flat_list, f, indent=2)
 
-    print(f"\n[API] Manifest generated: {total} total thumbnails indexed in maps.json and api/maps.json.")
+    print(f"\n[API] Manifest generated: {total} map paths indexed in maps.json and api/maps.json.")
 
 
 def main():
@@ -284,6 +290,7 @@ def main():
         except Exception:
             state = {}
 
+    repo_map_data = {}
     targets = [args.target] if args.target != "all" else ["ddnet", "unique", "kog"]
     for repo_name in targets:
         if repo_name in REPOS:
@@ -295,12 +302,13 @@ def main():
                 twgpu_bin,
                 twmap_bin,
                 state,
+                repo_map_data,
             )
 
     with open(state_path, "w") as f:
         json.dump(state, f, indent=2)
 
-    build_api_manifest(root_dir, args.resolution)
+    build_api_manifest(root_dir, args.resolution, repo_map_data)
 
     print("\nAll map processing finished.")
 
