@@ -26,7 +26,7 @@ on:
       jobs:
         description: 'Number of parallel rendering jobs'
         required: false
-        default: '1'
+        default: '2'
         type: string
 
 permissions:
@@ -72,7 +72,7 @@ jobs:
           chmod +x scripts/process_maps.py
 
           TARGET="${{ github.event.inputs.target || 'all' }}"
-          JOBS="${{ github.event.inputs.jobs || '1' }}"
+          JOBS="${{ github.event.inputs.jobs || '2' }}"
           FORCE_FLAG=""
           if [ "${{ github.event.inputs.force }}" = "true" ]; then
             FORCE_FLAG="--force"
@@ -91,4 +91,4 @@ jobs:
           commit_author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
-          file_pattern: "ddnet/** unique/** kog/** .commit_hashes.json"
+          file_pattern: "ddnet/** unique/** kog/** .commit_hashes.json maps.json api/**"

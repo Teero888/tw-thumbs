@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 """
 Thumbnail generator for DDNet, Unique, and KoG map repositories using twgpu-map-photography and twmap-fix.
-Generates JSON endpoints containing map relative paths and thumbnail relative paths.
-Ignores duplicate directories like maps7 in unique-maps.
+Generates JSON endpoints containing map relative paths, thumbnail paths, and detailed map metadata:
+- DDNet: type, difficulty (1-5), points
+- Unique: category (fetched from uniqueclan.net, cached in maps.json)
+- KoG: difficulty, stars (numeric), points, length (parsed from mapinfo.txt)
 """
 
 import argparse
 import datetime
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
 import tempfile
+import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
@@ -56,12 +60,129 @@ def get_git_head_sha(repo_dir):
     return None
 
 
+def fetch_ddnet_metadata():
+    """Fetches DDNet map metadata from bulk release API."""
+    metadata = {}
+    url = "https://ddnet.org/releases/maps.json"
+    print(f"[METADATA] Fetching DDNet map metadata from {url}...")
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = json.loads(resp.read().decode())
+        for m in data:
+            metadata[m["name"]] = {
+                "type": m.get("type"),
+                "difficulty": m.get("difficulty"),
+                "points": m.get("points"),
+            }
+        print(f"[METADATA] Successfully loaded metadata for {len(metadata)} DDNet maps.")
+    except Exception as e:
+        print(f"[METADATA WARNING] Failed to fetch DDNet bulk metadata: {e}")
+    return metadata
+
+
+def fetch_unique_category(map_name, cache):
+    """Fetches category for a single Unique map from uniqueclan.net HTML."""
+    if map_name in cache and cache[map_name] is not None:
+        return cache[map_name]
+
+    url = f"https://uniqueclan.net/map/{map_name}"
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            html = resp.read().decode("utf-8", errors="ignore")
+        cat_match = re.search(r"Category:\s*([^<]+)", html)
+        if cat_match:
+            cat = cat_match.group(1).strip()
+            cache[map_name] = cat
+            return cat
+    except Exception:
+        pass
+
+    cache[map_name] = None
+    return None
+
+
+def fetch_all_unique_metadata(map_names, root_dir):
+    """Fetches categories for Unique maps using existing maps.json for caching."""
+    cache = {}
+    maps_json_path = root_dir / "maps.json"
+
+    # Pre-populate cache from existing maps.json if present
+    if maps_json_path.exists():
+        try:
+            with open(maps_json_path, "r") as f:
+                existing_data = json.load(f)
+
+            if isinstance(existing_data, dict) and "maps" in existing_data and "unique" in existing_data["maps"]:
+                for entry in existing_data["maps"]["unique"]:
+                    if isinstance(entry, dict) and "name" in entry and "category" in entry:
+                        if entry["category"] is not None:
+                            cache[entry["name"]] = entry["category"]
+        except Exception:
+            cache = {}
+
+    print(f"[METADATA] Checking Unique map categories ({len(map_names)} maps)...")
+    missing_maps = [m for m in map_names if m not in cache or cache[m] is None]
+
+    if missing_maps:
+        print(f"[METADATA] Fetching {len(missing_maps)} uncached Unique map categories from uniqueclan.net...")
+        with ThreadPoolExecutor(max_workers=16) as executor:
+            futures = [executor.submit(fetch_unique_category, m, cache) for m in missing_maps]
+            for future in as_completed(futures):
+                pass
+
+    print(f"[METADATA] Successfully loaded metadata for {len(cache)} Unique maps.")
+    return cache
+
+
+def parse_kog_metadata(clone_dir):
+    """Parses KoG mapinfo.txt file for difficulty, stars, points, and length."""
+    metadata = {}
+    mapinfo_path = clone_dir / "mapinfo.txt"
+
+    if not mapinfo_path.exists():
+        url = "https://raw.githubusercontent.com/Gamer12120/KoGmaps/refs/heads/main/mapinfo.txt"
+        print(f"[METADATA] Fetching KoG mapinfo.txt from {url}...")
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                content = resp.read().decode("utf-8", errors="ignore")
+            lines = content.splitlines()
+        except Exception as e:
+            print(f"[METADATA WARNING] Failed to fetch KoG mapinfo.txt: {e}")
+            return metadata
+    else:
+        with open(mapinfo_path, "r", encoding="utf-8", errors="ignore") as f:
+            lines = f.readlines()
+
+    for line in lines[2:]:
+        parts = [p.strip() for p in line.split("|")]
+        if len(parts) >= 5:
+            map_name = parts[0]
+            if not map_name or map_name.startswith("="):
+                continue
+            diff = parts[1]
+            stars = parts[2].count("★")
+            pts = int(parts[3]) if parts[3].isdigit() else None
+            length = parts[4]
+
+            metadata[map_name] = {
+                "difficulty": diff,
+                "stars": stars,
+                "points": pts,
+                "length": length,
+            }
+
+    print(f"[METADATA] Successfully loaded metadata for {len(metadata)} KoG maps.")
+    return metadata
+
+
 def render_with_twgpu(twgpu_bin, map_path, work_dir, resolution, stem):
     """Helper to run twgpu and look for any variation of the generated image."""
     cmd = [str(twgpu_bin), str(map_path), "-r", resolution]
     run_cmd(cmd, cwd=work_dir)
     
-    # Check possible filename patterns produced by twgpu
     patterns = [f"{stem}_{resolution}.png", f"{stem}.png", f"{stem}_fixed_{resolution}.png", f"{stem}_fixed.png"]
     for pattern in patterns:
         img_path = Path(work_dir) / pattern
@@ -71,10 +192,6 @@ def render_with_twgpu(twgpu_bin, map_path, work_dir, resolution, stem):
 
 
 def render_single_map(map_path, output_png_path, twgpu_bin, twmap_bin, resolution):
-    """
-    Renders a single map. If direct rendering fails, it fixes the map exactly once
-    and makes exactly one retry attempt before giving up.
-    """
     output_png_path = Path(output_png_path)
     output_png_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -136,17 +253,47 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state,
 
     print(f"Found {len(map_files)} map files in {repo_name}.")
 
-    # Collect map repository relative paths and thumbnail relative paths
+    # Load repo-specific metadata
+    meta_dict = {}
+    if repo_name == "ddnet":
+        meta_dict = fetch_ddnet_metadata()
+    elif repo_name == "unique":
+        map_stems = [m.stem for m in map_files]
+        meta_dict = fetch_all_unique_metadata(map_stems, root_dir)
+    elif repo_name == "kog":
+        meta_dict = parse_kog_metadata(clone_dir)
+
+    # Collect map repository relative paths and metadata
     map_list = []
     for map_file in map_files:
+        stem = map_file.stem
         rel_map_path = str(map_file.relative_to(clone_dir))
-        thumb_path = f"{repo_name}/{map_file.stem}.png"
-        map_list.append({
-            "name": map_file.stem,
+        thumb_path = f"{repo_name}/{stem}.png"
+
+        item = {
+            "name": stem,
             "repo": repo_name,
             "map_path": rel_map_path,
             "thumbnail_path": thumb_path,
-        })
+        }
+
+        # Inject repository-specific metadata
+        if repo_name == "ddnet":
+            m_info = meta_dict.get(stem, {})
+            item["type"] = m_info.get("type")
+            item["difficulty"] = m_info.get("difficulty")
+            item["points"] = m_info.get("points")
+        elif repo_name == "unique":
+            item["category"] = meta_dict.get(stem)
+        elif repo_name == "kog":
+            m_info = meta_dict.get(stem, {})
+            item["difficulty"] = m_info.get("difficulty")
+            item["stars"] = m_info.get("stars")
+            item["points"] = m_info.get("points")
+            item["length"] = m_info.get("length")
+
+        map_list.append(item)
+
     repo_map_data[repo_name] = map_list
 
     rendered_count = 0
