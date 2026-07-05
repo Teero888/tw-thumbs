@@ -1,6 +1,42 @@
 {
-  "updated_at": "2026-07-05T07:20:27.692615+00:00",
+  "updated_at": "2026-07-05T07:33:51.970236+00:00",
   "resolution": "1280x720",
+  "types": {
+    "ddnet": [
+      "Brutal",
+      "DDmaX.Easy",
+      "DDmaX.Next",
+      "DDmaX.Nut",
+      "DDmaX.Pro",
+      "Dummy",
+      "Event",
+      "Fun",
+      "Insane",
+      "Moderate",
+      "Novice",
+      "Oldschool",
+      "Race",
+      "Solo"
+    ],
+    "unique": [
+      "Fastcap",
+      "Long Advanced",
+      "Long Easy",
+      "Long Hard",
+      "Middle",
+      "Short"
+    ],
+    "kog": [
+      "Easy",
+      "Extreme",
+      "Hard",
+      "Insane",
+      "Main",
+      "Mod",
+      "Others",
+      "Solo"
+    ]
+  },
   "counts": {
     "ddnet": 2415,
     "unique": 639,

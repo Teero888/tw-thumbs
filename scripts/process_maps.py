@@ -5,6 +5,7 @@ Generates JSON endpoints containing map relative paths, thumbnail paths, and det
 - DDNet: type, difficulty (1-5), points
 - Unique: category (fetched from uniqueclan.net, cached in maps.json)
 - KoG: difficulty, stars (numeric), points, length (parsed from mapinfo.txt)
+Also lists distinct string categories/types at the top of maps.json.
 """
 
 import argparse
@@ -108,7 +109,6 @@ def fetch_all_unique_metadata(map_names, root_dir):
     cache = {}
     maps_json_path = root_dir / "maps.json"
 
-    # Pre-populate cache from existing maps.json if present
     if maps_json_path.exists():
         try:
             with open(maps_json_path, "r") as f:
@@ -337,13 +337,23 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state,
 
 
 def build_api_manifest(root_dir, resolution, repo_map_data):
-    """Generates maps.json and api/maps.json JSON endpoints."""
+    """Generates maps.json and api/maps.json JSON endpoints including type lists at top."""
     api_dir = root_dir / "api"
     api_dir.mkdir(parents=True, exist_ok=True)
+
+    # Collect distinct string types/categories per repo
+    ddnet_types = sorted(list(set(m.get("type") for m in repo_map_data.get("ddnet", []) if m.get("type"))))
+    unique_categories = sorted(list(set(m.get("category") for m in repo_map_data.get("unique", []) if m.get("category"))))
+    kog_difficulties = sorted(list(set(m.get("difficulty") for m in repo_map_data.get("kog", []) if m.get("difficulty"))))
 
     manifest = {
         "updated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "resolution": resolution,
+        "types": {
+            "ddnet": ddnet_types,
+            "unique": unique_categories,
+            "kog": kog_difficulties,
+        },
         "counts": {},
         "maps": {},
     }
