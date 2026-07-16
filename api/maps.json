@@ -10557,6 +10557,15 @@
     "points": 11
   },
   {
+    "name": "Down Bass",
+    "repo": "ddnet",
+    "map_path": "types/moderate/maps/Down Bass.map",
+    "thumbnail_path": "ddnet/Down Bass.png",
+    "type": "Moderate",
+    "difficulty": 4,
+    "points": 13
+  },
+  {
     "name": "Dubush",
     "repo": "ddnet",
     "map_path": "types/moderate/maps/Dubush.map",

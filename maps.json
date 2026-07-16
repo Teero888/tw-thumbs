@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-16T02:51:54.839139+00:00",
+  "updated_at": "2026-07-16T05:45:56.899307+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2415,
+    "ddnet": 2416,
     "unique": 639,
     "kog": 1092,
-    "total": 4146
+    "total": 4147
   },
   "maps": {
     "ddnet": [
@@ -10613,6 +10613,15 @@
         "type": "Moderate",
         "difficulty": 3,
         "points": 11
+      },
+      {
+        "name": "Down Bass",
+        "repo": "ddnet",
+        "map_path": "types/moderate/maps/Down Bass.map",
+        "thumbnail_path": "ddnet/Down Bass.png",
+        "type": "Moderate",
+        "difficulty": 4,
+        "points": 13
       },
       {
         "name": "Dubush",
