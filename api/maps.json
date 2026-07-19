@@ -29137,6 +29137,16 @@
     "length": "L"
   },
   {
+    "name": "Rectillinear",
+    "repo": "kog",
+    "map_path": "HARD/Rectillinear.map",
+    "thumbnail_path": "kog/Rectillinear.png",
+    "difficulty": "Hard",
+    "stars": 3,
+    "points": 22,
+    "length": "S"
+  },
+  {
     "name": "RedCastle",
     "repo": "kog",
     "map_path": "HARD/RedCastle.map",
@@ -34904,6 +34914,16 @@
     "difficulty": "Main",
     "stars": 3,
     "points": 11,
+    "length": "S"
+  },
+  {
+    "name": "Pumpl",
+    "repo": "kog",
+    "map_path": "MAIN/Pumpl.map",
+    "thumbnail_path": "kog/Pumpl.png",
+    "difficulty": "Main",
+    "stars": 2,
+    "points": 8,
     "length": "S"
   },
   {
