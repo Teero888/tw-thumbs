@@ -21501,6 +21501,15 @@
     "points": 12
   },
   {
+    "name": "climbup",
+    "repo": "ddnet",
+    "map_path": "types/solo/maps/climbup.map",
+    "thumbnail_path": "ddnet/climbup.png",
+    "type": "Solo",
+    "difficulty": 2,
+    "points": 8
+  },
+  {
     "name": "combo II",
     "repo": "ddnet",
     "map_path": "types/solo/maps/combo II.map",
