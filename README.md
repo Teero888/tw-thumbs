@@ -32,6 +32,10 @@ The GitHub Workflow (`.github/workflows/generate_thumbnails.yml`) runs automatic
 - **Repository Dispatch**: Responds to `repository_dispatch` webhooks (`map_updated`, `ddnet_updated`, `unique_updated`, `kog_updated`, `generate_thumbnails`).
 - **Manual Trigger**: Can be manually triggered from GitHub's **Actions** tab with options for specific target repos or forced re-rendering.
 
+Existing thumbnails are re-rendered when their source `.map` file changes. A failed
+render is omitted from the generated manifests, does not advance the repository's
+recorded commit, and fails the workflow with the renderer's captured diagnostics.
+
 ## Running Locally
 
 To render thumbnails locally:

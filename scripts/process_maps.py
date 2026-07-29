@@ -39,6 +39,7 @@ REPOS = {
 DEFAULT_TWGPU_BIN = "twgpu/target/release/twgpu-map-photography"
 DEFAULT_TWMAP_BIN = "twmap/target/release/twmap-fix"
 STATE_FILE = ".commit_hashes.json"
+RENDER_FAILURE_EXIT_CODE = 2
 
 
 def run_cmd(cmd, cwd=None, check=False):
@@ -50,8 +51,19 @@ def run_cmd(cmd, cwd=None, check=False):
         text=True,
     )
     if check and res.returncode != 0:
-        raise RuntimeError(f"Command {' '.join(cmd)} failed (code {res.returncode}):\n{res.stderr}")
+        raise RuntimeError(
+            f"Command {' '.join(cmd)} failed (code {res.returncode}):\n{res.stderr}"
+        )
     return res
+
+
+def print_command_diagnostics(label, cmd, result):
+    """Print captured command output when a rendering tool fails."""
+    print(f"[{label}] Command failed (code {result.returncode}): {' '.join(cmd)}")
+    if result.stdout.strip():
+        print(f"[{label} STDOUT]\n{result.stdout.rstrip()}")
+    if result.stderr.strip():
+        print(f"[{label} STDERR]\n{result.stderr.rstrip()}")
 
 
 def get_git_head_sha(repo_dir):
@@ -59,6 +71,40 @@ def get_git_head_sha(repo_dir):
     if res.returncode == 0:
         return res.stdout.strip()
     return None
+
+
+def ensure_git_commit(repo_dir, sha):
+    """Fetch a shallow copy of a previous commit when it is not available locally."""
+    res = run_cmd(["git", "cat-file", "-e", f"{sha}^{{commit}}"], cwd=repo_dir)
+    if res.returncode == 0:
+        return
+
+    print(f"[GIT] Fetching previous commit {sha} for change detection...")
+    run_cmd(["git", "fetch", "--depth", "1", "origin", sha], cwd=repo_dir, check=True)
+
+
+def get_changed_map_paths(repo_dir, previous_sha, current_sha):
+    """Return map paths added, modified, renamed, or deleted between two commits."""
+    if not previous_sha or not current_sha or previous_sha == current_sha:
+        return set()
+
+    ensure_git_commit(repo_dir, previous_sha)
+    res = run_cmd(
+        [
+            "git",
+            "diff",
+            "--name-only",
+            "-z",
+            "--no-renames",
+            previous_sha,
+            current_sha,
+            "--",
+            ":(glob)**/*.map",
+        ],
+        cwd=repo_dir,
+        check=True,
+    )
+    return {path for path in res.stdout.split("\0") if path}
 
 
 def fetch_ddnet_metadata():
@@ -181,13 +227,29 @@ def parse_kog_metadata(clone_dir):
 def render_with_twgpu(twgpu_bin, map_path, work_dir, resolution, stem):
     """Helper to run twgpu and look for any variation of the generated image."""
     cmd = [str(twgpu_bin), str(map_path), "-r", resolution]
-    run_cmd(cmd, cwd=work_dir)
-    
-    patterns = [f"{stem}_{resolution}.png", f"{stem}.png", f"{stem}_fixed_{resolution}.png", f"{stem}_fixed.png"]
+    res = run_cmd(cmd, cwd=work_dir)
+
+    patterns = [
+        f"{stem}_{resolution}.png",
+        f"{stem}.png",
+        f"{stem}_fixed_{resolution}.png",
+        f"{stem}_fixed.png",
+    ]
     for pattern in patterns:
         img_path = Path(work_dir) / pattern
         if img_path.exists():
             return img_path
+
+    if res.returncode != 0:
+        print_command_diagnostics("RENDER ERROR", cmd, res)
+    else:
+        generated_files = sorted(path.name for path in Path(work_dir).glob("*.png"))
+        print(
+            f"[RENDER ERROR] Renderer exited successfully for {Path(map_path).name}, "
+            f"but none of the expected files were created: {', '.join(patterns)}"
+        )
+        if generated_files:
+            print(f"[RENDER ERROR] PNG files found instead: {', '.join(generated_files)}")
     return None
 
 
@@ -201,7 +263,9 @@ def render_single_map(map_path, output_png_path, twgpu_bin, twmap_bin, resolutio
         map_stem = map_path_abs.stem
 
         # Try 1: Direct render
-        generated_png = render_with_twgpu(twgpu_bin, map_path_abs, work_dir, resolution, map_stem)
+        generated_png = render_with_twgpu(
+            twgpu_bin, map_path_abs, work_dir, resolution, map_stem
+        )
 
         # Try 2: Fix once and retry once if Try 1 failed
         if not generated_png:
@@ -212,7 +276,16 @@ def render_single_map(map_path, output_png_path, twgpu_bin, twmap_bin, resolutio
 
             if fix_res.returncode == 0 and fixed_map_path.exists():
                 print(f"[RETRY] Retrying render on fixed map for {map_path_abs.name}...")
-                generated_png = render_with_twgpu(twgpu_bin, fixed_map_path, work_dir, resolution, map_stem)
+                generated_png = render_with_twgpu(
+                    twgpu_bin, fixed_map_path, work_dir, resolution, map_stem
+                )
+            elif fix_res.returncode != 0:
+                print_command_diagnostics("FIX ERROR", fix_cmd, fix_res)
+            else:
+                print(
+                    f"[FIX ERROR] twmap-fix exited successfully for {map_path_abs.name}, "
+                    f"but did not create {fixed_map_path.name}"
+                )
 
         # Save result if successful
         if generated_png and generated_png.exists():
@@ -224,7 +297,9 @@ def render_single_map(map_path, output_png_path, twgpu_bin, twmap_bin, resolutio
             return False
 
 
-def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state, repo_map_data):
+def process_repo(
+    repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state, repo_map_data
+):
     target_dir = root_dir / config["dir"]
     target_dir.mkdir(parents=True, exist_ok=True)
 
@@ -235,8 +310,8 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state,
 
     if clone_dir.exists():
         print(f"Updating repository {repo_name}...")
-        run_cmd(["git", "fetch", "--all"], cwd=clone_dir)
-        run_cmd(["git", "reset", "--hard", "origin/HEAD"], cwd=clone_dir)
+        run_cmd(["git", "fetch", "--all"], cwd=clone_dir, check=True)
+        run_cmd(["git", "reset", "--hard", "origin/HEAD"], cwd=clone_dir, check=True)
     else:
         print(f"Cloning repository {repo_name}...")
         clone_dir.parent.mkdir(parents=True, exist_ok=True)
@@ -253,6 +328,27 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state,
 
     print(f"Found {len(map_files)} map files in {repo_name}.")
 
+    previous_sha = state.get(repo_name)
+    changed_map_paths = get_changed_map_paths(clone_dir, previous_sha, current_sha)
+    current_map_paths = {str(path.relative_to(clone_dir)) for path in map_files}
+    changed_current_map_paths = changed_map_paths & current_map_paths
+    deleted_map_paths = changed_map_paths - current_map_paths
+
+    if changed_map_paths:
+        print(
+            f"[CHANGES] {len(changed_current_map_paths)} added/modified map(s), "
+            f"{len(deleted_map_paths)} deleted/renamed map path(s) since {previous_sha}."
+        )
+
+    # Remove thumbnails for deleted maps unless another current map has the same stem.
+    current_stems = {path.stem for path in map_files}
+    for deleted_map_path in sorted(deleted_map_paths):
+        deleted_stem = Path(deleted_map_path).stem
+        obsolete_thumbnail = target_dir / f"{deleted_stem}.png"
+        if deleted_stem not in current_stems and obsolete_thumbnail.exists():
+            obsolete_thumbnail.unlink()
+            print(f"[DELETE] Removed obsolete thumbnail {obsolete_thumbnail}")
+
     # Load repo-specific metadata
     meta_dict = {}
     if repo_name == "ddnet":
@@ -264,7 +360,7 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state,
         meta_dict = parse_kog_metadata(clone_dir)
 
     # Collect map repository relative paths and metadata
-    map_list = []
+    map_records = []
     for map_file in map_files:
         stem = map_file.stem
         rel_map_path = str(map_file.relative_to(clone_dir))
@@ -292,48 +388,77 @@ def process_repo(repo_name, config, args, root_dir, twgpu_bin, twmap_bin, state,
             item["points"] = m_info.get("points")
             item["length"] = m_info.get("length")
 
-        map_list.append(item)
-
-    repo_map_data[repo_name] = map_list
+        map_records.append((map_file, item))
 
     rendered_count = 0
     skipped_count = 0
     failed_count = 0
+    failed_map_paths = set()
 
-    tasks = []
+    tasks = {}
     with ThreadPoolExecutor(max_workers=args.jobs) as executor:
         for map_file in map_files:
+            rel_map_path = str(map_file.relative_to(clone_dir))
             output_png_path = target_dir / f"{map_file.stem}.png"
 
-            if output_png_path.exists() and not args.force:
+            should_render = (
+                args.force
+                or not output_png_path.exists()
+                or rel_map_path in changed_current_map_paths
+            )
+            if not should_render:
                 skipped_count += 1
                 continue
 
-            tasks.append(
-                executor.submit(
-                    render_single_map,
-                    map_file,
-                    output_png_path,
-                    twgpu_bin,
-                    twmap_bin,
-                    args.resolution,
-                )
+            future = executor.submit(
+                render_single_map,
+                map_file,
+                output_png_path,
+                twgpu_bin,
+                twmap_bin,
+                args.resolution,
             )
+            tasks[future] = (map_file, rel_map_path)
 
         for future in as_completed(tasks):
+            map_file, rel_map_path = tasks[future]
             try:
                 success = future.result()
                 if success:
                     rendered_count += 1
                 else:
                     failed_count += 1
+                    failed_map_paths.add(rel_map_path)
             except Exception as e:
-                print(f"[EXCEPTION] Error during rendering: {e}")
+                print(f"[EXCEPTION] Error while rendering {map_file}: {e}")
                 failed_count += 1
+                failed_map_paths.add(rel_map_path)
 
-    print(f"Summary for {repo_name}: Rendered: {rendered_count}, Skipped: {skipped_count}, Failed: {failed_count}")
-    if current_sha:
+    print(
+        f"Summary for {repo_name}: Rendered: {rendered_count}, "
+        f"Skipped: {skipped_count}, Failed: {failed_count}"
+    )
+
+    # Never advertise a missing thumbnail or a stale thumbnail from a failed re-render.
+    repo_map_data[repo_name] = [
+        item
+        for map_file, item in map_records
+        if item["map_path"] not in failed_map_paths
+        and (target_dir / f"{map_file.stem}.png").exists()
+    ]
+    omitted_count = len(map_records) - len(repo_map_data[repo_name])
+    if omitted_count:
+        print(f"[MANIFEST] Omitted {omitted_count} map(s) without a successful current thumbnail.")
+
+    if current_sha and failed_count == 0:
         state[repo_name] = current_sha
+    elif failed_count:
+        print(
+            f"[STATE] Not advancing {repo_name} from {previous_sha} to {current_sha} "
+            f"because {failed_count} thumbnail(s) failed."
+        )
+
+    return failed_count
 
 
 def build_api_manifest(root_dir, resolution, repo_map_data):
@@ -381,6 +506,28 @@ def build_api_manifest(root_dir, resolution, repo_map_data):
         json.dump(flat_list, f, indent=2)
 
     print(f"\n[API] Manifest generated: {total} map paths indexed in maps.json and api/maps.json.")
+
+
+def load_existing_repo_map_data(root_dir):
+    """Load existing manifest entries so targeted runs preserve unprocessed repos."""
+    maps_json_path = root_dir / "maps.json"
+    if not maps_json_path.exists():
+        return {}
+
+    try:
+        with open(maps_json_path, "r") as f:
+            existing_data = json.load(f)
+        existing_maps = existing_data.get("maps", {})
+        if not isinstance(existing_maps, dict):
+            return {}
+        return {
+            repo: entries
+            for repo, entries in existing_maps.items()
+            if repo in REPOS and isinstance(entries, list)
+        }
+    except (OSError, json.JSONDecodeError) as e:
+        print(f"[MANIFEST WARNING] Could not preserve existing manifest entries: {e}")
+        return {}
 
 
 def main():
@@ -449,11 +596,14 @@ def main():
         except Exception:
             state = {}
 
-    repo_map_data = {}
     targets = [args.target] if args.target != "all" else ["ddnet", "unique", "kog"]
+    repo_map_data = (
+        load_existing_repo_map_data(root_dir) if args.target != "all" else {}
+    )
+    total_failed = 0
     for repo_name in targets:
         if repo_name in REPOS:
-            process_repo(
+            total_failed += process_repo(
                 repo_name,
                 REPOS[repo_name],
                 args,
@@ -468,6 +618,10 @@ def main():
         json.dump(state, f, indent=2)
 
     build_api_manifest(root_dir, args.resolution, repo_map_data)
+
+    if total_failed:
+        print(f"\nThumbnail generation failed for {total_failed} map(s).")
+        sys.exit(RENDER_FAILURE_EXIT_CODE)
 
     print("\nAll map processing finished.")
 

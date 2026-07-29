@@ -39,7 +39,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -48,26 +48,54 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb libgl1 python3
 
+      - name: Resolve Rendering Tool Revisions
+        id: tool-revisions
+        run: |
+          TWGPU_REF="$(git ls-remote https://gitlab.com/ddnet-rs/twgpu.git HEAD | cut -f1)"
+          TWMAP_REF="$(git ls-remote https://gitlab.com/ddnet-rs/twmap.git HEAD | cut -f1)"
+
+          if [[ ! "$TWGPU_REF" =~ ^[0-9a-f]{40}$ || ! "$TWMAP_REF" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Failed to resolve rendering tool revisions." >&2
+            exit 1
+          fi
+
+          echo "twgpu_ref=$TWGPU_REF" >> "$GITHUB_OUTPUT"
+          echo "twmap_ref=$TWMAP_REF" >> "$GITHUB_OUTPUT"
+
       - name: Cache Built Binaries
         id: cache-binaries
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v5
         with:
           path: |
             bin/
             twgpu/target/release/twgpu-map-photography
             twmap/target/release/twmap-fix
-          key: ${{ runner.os }}-twgpu-twmap-v1
+          key: ${{ runner.os }}-twgpu-${{ steps.tool-revisions.outputs.twgpu_ref }}-twmap-${{ steps.tool-revisions.outputs.twmap_ref }}
 
       - name: Install Rust Toolchain
         if: steps.cache-binaries.outputs.cache-hit != 'true'
         uses: dtolnay/rust-toolchain@stable
 
       - name: Build Rendering Tools
+        env:
+          TWGPU_REF: ${{ steps.tool-revisions.outputs.twgpu_ref }}
+          TWMAP_REF: ${{ steps.tool-revisions.outputs.twmap_ref }}
         run: |
           chmod +x scripts/build_tools.sh
           ./scripts/build_tools.sh
 
+      - name: Save Built Binaries
+        if: steps.cache-binaries.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: |
+            bin/
+            twgpu/target/release/twgpu-map-photography
+            twmap/target/release/twmap-fix
+          key: ${{ steps.cache-binaries.outputs.cache-primary-key }}
+
       - name: Generate Thumbnails
+        id: generate
         run: |
           chmod +x scripts/process_maps.py
 
@@ -78,17 +106,31 @@ jobs:
             FORCE_FLAG="--force"
           fi
 
+          set +e
           xvfb-run -a python3 scripts/process_maps.py \
             --target "$TARGET" \
             --resolution "1280x720" \
             --jobs "$JOBS" \
             $FORCE_FLAG
+          STATUS=$?
+          set -e
+
+          echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+          if [ "$STATUS" -ne 0 ] && [ "$STATUS" -ne 2 ]; then
+            exit "$STATUS"
+          fi
 
       - name: Commit and Push Updated Thumbnails
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "Automated map thumbnail generation update [skip ci]"
           commit_author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
           file_pattern: "ddnet/** unique/** kog/** .commit_hashes.json maps.json api/**"
+
+      - name: Fail Workflow on Thumbnail Errors
+        if: steps.generate.outputs.status == '2'
+        run: |
+          echo "One or more thumbnails failed to render. See the Generate Thumbnails step for diagnostics." >&2
+          exit 1

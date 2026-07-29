@@ -8,6 +8,8 @@ cd "$ROOT_DIR"
 
 TWGPU_BIN="$ROOT_DIR/twgpu/target/release/twgpu-map-photography"
 TWMAP_BIN="$ROOT_DIR/twmap/target/release/twmap-fix"
+TWGPU_REF="${TWGPU_REF:-}"
+TWMAP_REF="${TWMAP_REF:-}"
 
 mkdir -p "$ROOT_DIR/bin"
 
@@ -16,6 +18,10 @@ if [[ ! -f "$TWGPU_BIN" && ! -f "$ROOT_DIR/bin/twgpu-map-photography" ]]; then
     if [[ ! -d "$ROOT_DIR/twgpu" ]]; then
         git clone https://gitlab.com/ddnet-rs/twgpu.git "$ROOT_DIR/twgpu"
     fi
+    if [[ -n "$TWGPU_REF" ]]; then
+        git -C "$ROOT_DIR/twgpu" fetch origin "$TWGPU_REF"
+        git -C "$ROOT_DIR/twgpu" checkout --detach "$TWGPU_REF"
+    fi
     (cd "$ROOT_DIR/twgpu/twgpu-tools" && cargo build --release)
 fi
 
@@ -23,6 +29,10 @@ if [[ ! -f "$TWMAP_BIN" && ! -f "$ROOT_DIR/bin/twmap-fix" ]]; then
     echo "Building twmap-fix..."
     if [[ ! -d "$ROOT_DIR/twmap" ]]; then
         git clone https://gitlab.com/ddnet-rs/twmap.git "$ROOT_DIR/twmap"
+    fi
+    if [[ -n "$TWMAP_REF" ]]; then
+        git -C "$ROOT_DIR/twmap" fetch origin "$TWMAP_REF"
+        git -C "$ROOT_DIR/twmap" checkout --detach "$TWMAP_REF"
     fi
     (cd "$ROOT_DIR/twmap/twmap-tools" && cargo build --release)
 fi
