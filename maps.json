@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-29T11:30:33.633224+00:00",
+  "updated_at": "2026-07-29T14:24:07.977335+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2417,
+    "ddnet": 2416,
     "unique": 639,
     "kog": 1094,
-    "total": 4150
+    "total": 4149
   },
   "maps": {
     "ddnet": [
@@ -21557,15 +21557,6 @@
         "type": "Solo",
         "difficulty": 3,
         "points": 12
-      },
-      {
-        "name": "climbup",
-        "repo": "ddnet",
-        "map_path": "types/solo/maps/climbup.map",
-        "thumbnail_path": "ddnet/climbup.png",
-        "type": "Solo",
-        "difficulty": 2,
-        "points": 8
       },
       {
         "name": "combo II",
