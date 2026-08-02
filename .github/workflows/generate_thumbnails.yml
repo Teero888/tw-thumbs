@@ -48,6 +48,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libvulkan1 mesa-vulkan-drivers vulkan-tools xvfb libgl1 python3
 
+      - name: Install DDNet Data Directory
+        run: |
+          # Maps referencing external mapres (not embedded in the .map) make twmap
+          # look up a DDNet installation via twstorage. Without it, rendering fails
+          # with: IoError(Custom { kind: NotFound, error: Error { version: DDNet06, dir: Data } })
+          # /usr/local/share/ddnet/data is one of the paths twstorage searches.
+          git clone --depth 1 --filter=blob:none --sparse \
+            https://github.com/ddnet/ddnet.git "$RUNNER_TEMP/ddnet-src"
+          git -C "$RUNNER_TEMP/ddnet-src" sparse-checkout set data/mapres
+          sudo mkdir -p /usr/local/share/ddnet
+          sudo cp -r "$RUNNER_TEMP/ddnet-src/data" /usr/local/share/ddnet/data
+          test -f /usr/local/share/ddnet/data/mapres/generic_unhookable.png
+          echo "Installed $(ls /usr/local/share/ddnet/data/mapres | wc -l) mapres files."
+
       - name: Resolve Rendering Tool Revisions
         id: tool-revisions
         run: |
