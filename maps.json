@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-02T16:04:56.369693+00:00",
+  "updated_at": "2026-08-02T18:12:09.647705+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2416,
+    "ddnet": 2418,
     "unique": 639,
     "kog": 1094,
-    "total": 4149
+    "total": 4151
   },
   "maps": {
     "ddnet": [
@@ -2684,6 +2684,15 @@
         "type": "Brutal",
         "difficulty": 1,
         "points": 18
+      },
+      {
+        "name": "Rude Buster",
+        "repo": "ddnet",
+        "map_path": "types/brutal/maps/Rude Buster.map",
+        "thumbnail_path": "ddnet/Rude Buster.png",
+        "type": "Brutal",
+        "difficulty": 4,
+        "points": 27
       },
       {
         "name": "Ruin",
@@ -21557,6 +21566,15 @@
         "type": "Solo",
         "difficulty": 3,
         "points": 12
+      },
+      {
+        "name": "climbup",
+        "repo": "ddnet",
+        "map_path": "types/solo/maps/climbup.map",
+        "thumbnail_path": "ddnet/climbup.png",
+        "type": "Solo",
+        "difficulty": 2,
+        "points": 8
       },
       {
         "name": "combo II",

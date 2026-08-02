@@ -2628,6 +2628,15 @@
     "points": 18
   },
   {
+    "name": "Rude Buster",
+    "repo": "ddnet",
+    "map_path": "types/brutal/maps/Rude Buster.map",
+    "thumbnail_path": "ddnet/Rude Buster.png",
+    "type": "Brutal",
+    "difficulty": 4,
+    "points": 27
+  },
+  {
     "name": "Ruin",
     "repo": "ddnet",
     "map_path": "types/brutal/maps/Ruin.map",
@@ -21499,6 +21508,15 @@
     "type": "Solo",
     "difficulty": 3,
     "points": 12
+  },
+  {
+    "name": "climbup",
+    "repo": "ddnet",
+    "map_path": "types/solo/maps/climbup.map",
+    "thumbnail_path": "ddnet/climbup.png",
+    "type": "Solo",
+    "difficulty": 2,
+    "points": 8
   },
   {
     "name": "combo II",
