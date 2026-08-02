@@ -2,8 +2,8 @@ name: Generate Map Thumbnails
 
 on:
   schedule:
-    # Run every 3 hours to check for new commits across the map repositories
-    - cron: '0 */3 * * *'
+    # Run every 5 hours to check for new commits across the map repositories
+    - cron: '0 */5 * * *'
   repository_dispatch:
     types: [map_updated, ddnet_updated, unique_updated, kog_updated, generate_thumbnails]
   workflow_dispatch:
@@ -26,7 +26,7 @@ on:
       jobs:
         description: 'Number of parallel rendering jobs'
         required: false
-        default: '2'
+        default: '1'
         type: string
 
 permissions:
@@ -100,12 +100,12 @@ jobs:
           chmod +x scripts/process_maps.py
 
           TARGET="${{ github.event.inputs.target || 'all' }}"
-          JOBS="${{ github.event.inputs.jobs || '2' }}"
+          JOBS="${{ github.event.inputs.jobs || '1' }}"
           FORCE_FLAG=""
           if [ "${{ github.event.inputs.force }}" = "true" ]; then
             FORCE_FLAG="--force"
           fi
-
+          export MESA_VK_DEVICE_SELECT=llvmpipe
           set +e
           xvfb-run -a python3 scripts/process_maps.py \
             --target "$TARGET" \
