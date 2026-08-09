@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-09T01:47:42.731615+00:00",
+  "updated_at": "2026-08-09T05:49:41.647796+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2418,
+    "ddnet": 2419,
     "unique": 639,
     "kog": 1094,
-    "total": 4151
+    "total": 4152
   },
   "maps": {
     "ddnet": [
@@ -21773,6 +21773,15 @@
         "type": "Solo",
         "difficulty": 2,
         "points": 8
+      },
+      {
+        "name": "synopsis",
+        "repo": "ddnet",
+        "map_path": "types/solo/maps/synopsis.map",
+        "thumbnail_path": "ddnet/synopsis.png",
+        "type": "Solo",
+        "difficulty": 4,
+        "points": 16
       },
       {
         "name": "taser",

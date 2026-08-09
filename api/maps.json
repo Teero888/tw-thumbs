@@ -21717,6 +21717,15 @@
     "points": 8
   },
   {
+    "name": "synopsis",
+    "repo": "ddnet",
+    "map_path": "types/solo/maps/synopsis.map",
+    "thumbnail_path": "ddnet/synopsis.png",
+    "type": "Solo",
+    "difficulty": 4,
+    "points": 16
+  },
+  {
     "name": "taser",
     "repo": "ddnet",
     "map_path": "types/solo/maps/taser.map",
