@@ -28,7 +28,7 @@ Thumbnails are automatically generated from `.map` files in the following reposi
 ## GitHub Workflows Automation
 
 The GitHub Workflow (`.github/workflows/generate_thumbnails.yml`) runs automatically:
-- **Scheduled Cron**: Checks every 3 hours for new commits on any of the 3 map repositories.
+- **Scheduled Cron**: Checks every 5 hours for new commits on any of the 3 map repositories.
 - **Repository Dispatch**: Responds to `repository_dispatch` webhooks (`map_updated`, `ddnet_updated`, `unique_updated`, `kog_updated`, `generate_thumbnails`).
 - **Manual Trigger**: Can be manually triggered from GitHub's **Actions** tab with options for specific target repos or forced re-rendering.
 
