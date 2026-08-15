@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-15T01:17:15.111250+00:00",
+  "updated_at": "2026-08-15T05:27:31.536558+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2419,
+    "ddnet": 2420,
     "unique": 639,
     "kog": 1094,
-    "total": 4152
+    "total": 4153
   },
   "maps": {
     "ddnet": [
@@ -20153,6 +20153,15 @@
         "type": "Solo",
         "difficulty": 4,
         "points": 16
+      },
+      {
+        "name": "Patica",
+        "repo": "ddnet",
+        "map_path": "types/solo/maps/Patica.map",
+        "thumbnail_path": "ddnet/Patica.png",
+        "type": "Solo",
+        "difficulty": 2,
+        "points": 8
       },
       {
         "name": "Penalty",

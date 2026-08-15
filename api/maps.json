@@ -20097,6 +20097,15 @@
     "points": 16
   },
   {
+    "name": "Patica",
+    "repo": "ddnet",
+    "map_path": "types/solo/maps/Patica.map",
+    "thumbnail_path": "ddnet/Patica.png",
+    "type": "Solo",
+    "difficulty": 2,
+    "points": 8
+  },
+  {
     "name": "Penalty",
     "repo": "ddnet",
     "map_path": "types/solo/maps/Penalty.map",
