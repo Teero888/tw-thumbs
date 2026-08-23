@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-23T01:22:19.015969+00:00",
+  "updated_at": "2026-08-23T05:31:54.787910+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2420,
+    "ddnet": 2421,
     "unique": 639,
     "kog": 1094,
-    "total": 4153
+    "total": 4154
   },
   "maps": {
     "ddnet": [
@@ -16469,6 +16469,15 @@
         "repo": "ddnet",
         "map_path": "types/oldschool/maps/Teestar.map",
         "thumbnail_path": "ddnet/Teestar.png",
+        "type": "Oldschool",
+        "difficulty": 1,
+        "points": 6
+      },
+      {
+        "name": "Teleport 2",
+        "repo": "ddnet",
+        "map_path": "types/oldschool/maps/Teleport 2.map",
+        "thumbnail_path": "ddnet/Teleport 2.png",
         "type": "Oldschool",
         "difficulty": 1,
         "points": 6

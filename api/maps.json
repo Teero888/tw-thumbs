@@ -16416,6 +16416,15 @@
     "points": 6
   },
   {
+    "name": "Teleport 2",
+    "repo": "ddnet",
+    "map_path": "types/oldschool/maps/Teleport 2.map",
+    "thumbnail_path": "ddnet/Teleport 2.png",
+    "type": "Oldschool",
+    "difficulty": 1,
+    "points": 6
+  },
+  {
     "name": "The Ultimate Rainbow",
     "repo": "ddnet",
     "map_path": "types/oldschool/maps/The Ultimate Rainbow.map",
