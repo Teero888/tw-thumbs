@@ -2097,6 +2097,15 @@
     "points": 34
   },
   {
+    "name": "Mitosis",
+    "repo": "ddnet",
+    "map_path": "types/brutal/maps/Mitosis.map",
+    "thumbnail_path": "ddnet/Mitosis.png",
+    "type": "Brutal",
+    "difficulty": 4,
+    "points": 27
+  },
+  {
     "name": "MonkeyStyle",
     "repo": "ddnet",
     "map_path": "types/brutal/maps/MonkeyStyle.map",

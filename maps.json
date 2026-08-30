@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-30T04:02:14.932583+00:00",
+  "updated_at": "2026-08-30T10:20:15.706823+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2421,
+    "ddnet": 2422,
     "unique": 639,
     "kog": 1094,
-    "total": 4154
+    "total": 4155
   },
   "maps": {
     "ddnet": [
@@ -2153,6 +2153,15 @@
         "type": "Insane",
         "difficulty": 1,
         "points": 34
+      },
+      {
+        "name": "Mitosis",
+        "repo": "ddnet",
+        "map_path": "types/brutal/maps/Mitosis.map",
+        "thumbnail_path": "ddnet/Mitosis.png",
+        "type": "Brutal",
+        "difficulty": 4,
+        "points": 27
       },
       {
         "name": "MonkeyStyle",
