@@ -19170,6 +19170,15 @@
     "points": 12
   },
   {
+    "name": "Grief",
+    "repo": "ddnet",
+    "map_path": "types/solo/maps/Grief.map",
+    "thumbnail_path": "ddnet/Grief.png",
+    "type": "Solo",
+    "difficulty": 3,
+    "points": 12
+  },
+  {
     "name": "Grind",
     "repo": "ddnet",
     "map_path": "types/solo/maps/Grind.map",

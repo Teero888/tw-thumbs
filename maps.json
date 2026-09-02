@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-02T03:16:30.107997+00:00",
+  "updated_at": "2026-09-02T09:23:49.137256+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2422,
+    "ddnet": 2423,
     "unique": 639,
     "kog": 1094,
-    "total": 4155
+    "total": 4156
   },
   "maps": {
     "ddnet": [
@@ -19223,6 +19223,15 @@
         "repo": "ddnet",
         "map_path": "types/solo/maps/Grid.map",
         "thumbnail_path": "ddnet/Grid.png",
+        "type": "Solo",
+        "difficulty": 3,
+        "points": 12
+      },
+      {
+        "name": "Grief",
+        "repo": "ddnet",
+        "map_path": "types/solo/maps/Grief.map",
+        "thumbnail_path": "ddnet/Grief.png",
         "type": "Solo",
         "difficulty": 3,
         "points": 12
