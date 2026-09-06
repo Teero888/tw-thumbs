@@ -10323,6 +10323,15 @@
     "points": 15
   },
   {
+    "name": "Cloudberry Fields",
+    "repo": "ddnet",
+    "map_path": "types/moderate/maps/Cloudberry Fields.map",
+    "thumbnail_path": "ddnet/Cloudberry Fields.png",
+    "type": "Moderate",
+    "difficulty": 1,
+    "points": 7
+  },
+  {
     "name": "Coffee I",
     "repo": "ddnet",
     "map_path": "types/moderate/maps/Coffee I.map",

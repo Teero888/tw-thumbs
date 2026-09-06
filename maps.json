@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-06T03:19:35.742908+00:00",
+  "updated_at": "2026-09-06T09:13:29.219601+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2423,
+    "ddnet": 2424,
     "unique": 639,
     "kog": 1094,
-    "total": 4156
+    "total": 4157
   },
   "maps": {
     "ddnet": [
@@ -10379,6 +10379,15 @@
         "type": "Moderate",
         "difficulty": 5,
         "points": 15
+      },
+      {
+        "name": "Cloudberry Fields",
+        "repo": "ddnet",
+        "map_path": "types/moderate/maps/Cloudberry Fields.map",
+        "thumbnail_path": "ddnet/Cloudberry Fields.png",
+        "type": "Moderate",
+        "difficulty": 1,
+        "points": 7
       },
       {
         "name": "Coffee I",
