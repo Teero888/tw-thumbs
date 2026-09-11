@@ -23118,6 +23118,13 @@
     "category": "Short"
   },
   {
+    "name": "run_4_monkii",
+    "repo": "unique",
+    "map_path": "maps/run_4_monkii.map",
+    "thumbnail_path": "unique/run_4_monkii.png",
+    "category": "Short"
+  },
+  {
     "name": "run_4affe",
     "repo": "unique",
     "map_path": "maps/run_4affe.map",

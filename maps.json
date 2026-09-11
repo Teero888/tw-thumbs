@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-11T14:08:15.187770+00:00",
+  "updated_at": "2026-09-11T18:14:27.485439+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -51,9 +51,9 @@
   },
   "counts": {
     "ddnet": 2424,
-    "unique": 639,
+    "unique": 640,
     "kog": 1094,
-    "total": 4157
+    "total": 4158
   },
   "maps": {
     "ddnet": [
@@ -23175,6 +23175,13 @@
         "repo": "unique",
         "map_path": "maps/run_4_dreamer.map",
         "thumbnail_path": "unique/run_4_dreamer.png",
+        "category": "Short"
+      },
+      {
+        "name": "run_4_monkii",
+        "repo": "unique",
+        "map_path": "maps/run_4_monkii.map",
+        "thumbnail_path": "unique/run_4_monkii.png",
         "category": "Short"
       },
       {
