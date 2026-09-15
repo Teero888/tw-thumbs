@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-15T03:46:07.658212+00:00",
+  "updated_at": "2026-09-15T09:50:47.704693+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2424,
+    "ddnet": 2425,
     "unique": 640,
     "kog": 1094,
-    "total": 4158
+    "total": 4159
   },
   "maps": {
     "ddnet": [
@@ -9803,6 +9803,15 @@
         "type": "Insane",
         "difficulty": 1,
         "points": 34
+      },
+      {
+        "name": "Qu'Tan",
+        "repo": "ddnet",
+        "map_path": "types/insane/maps/Qu'Tan.map",
+        "thumbnail_path": "ddnet/Qu'Tan.png",
+        "type": "Insane",
+        "difficulty": 2,
+        "points": 38
       },
       {
         "name": "Ravillion",

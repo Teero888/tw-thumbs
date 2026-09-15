@@ -9747,6 +9747,15 @@
     "points": 34
   },
   {
+    "name": "Qu'Tan",
+    "repo": "ddnet",
+    "map_path": "types/insane/maps/Qu'Tan.map",
+    "thumbnail_path": "ddnet/Qu'Tan.png",
+    "type": "Insane",
+    "difficulty": 2,
+    "points": 38
+  },
+  {
     "name": "Ravillion",
     "repo": "ddnet",
     "map_path": "types/insane/maps/Ravillion.map",
