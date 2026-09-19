@@ -21965,6 +21965,13 @@
     "category": "Short"
   },
   {
+    "name": "Run_4ReTTeX",
+    "repo": "unique",
+    "map_path": "maps/Run_4ReTTeX.map",
+    "thumbnail_path": "unique/Run_4ReTTeX.png",
+    "category": "Short"
+  },
+  {
     "name": "Run_4Ryo",
     "repo": "unique",
     "map_path": "maps/Run_4Ryo.map",

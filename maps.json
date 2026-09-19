@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-19T17:50:50.689918+00:00",
+  "updated_at": "2026-09-19T22:12:32.108597+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -51,9 +51,9 @@
   },
   "counts": {
     "ddnet": 2425,
-    "unique": 640,
+    "unique": 641,
     "kog": 1094,
-    "total": 4159
+    "total": 4160
   },
   "maps": {
     "ddnet": [
@@ -22022,6 +22022,13 @@
         "repo": "unique",
         "map_path": "maps/Run_4Inferno.map",
         "thumbnail_path": "unique/Run_4Inferno.png",
+        "category": "Short"
+      },
+      {
+        "name": "Run_4ReTTeX",
+        "repo": "unique",
+        "map_path": "maps/Run_4ReTTeX.map",
+        "thumbnail_path": "unique/Run_4ReTTeX.png",
         "category": "Short"
       },
       {
