@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-20T03:47:26.885983+00:00",
+  "updated_at": "2026-09-20T09:39:23.353781+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2425,
+    "ddnet": 2426,
     "unique": 641,
     "kog": 1094,
-    "total": 4160
+    "total": 4161
   },
   "maps": {
     "ddnet": [
@@ -9179,6 +9179,15 @@
         "repo": "ddnet",
         "map_path": "types/fun/maps/9gates.map",
         "thumbnail_path": "ddnet/9gates.png",
+        "type": "Fun",
+        "difficulty": 0,
+        "points": 0
+      },
+      {
+        "name": "Auto Maze",
+        "repo": "ddnet",
+        "map_path": "types/fun/maps/Auto Maze.map",
+        "thumbnail_path": "ddnet/Auto Maze.png",
         "type": "Fun",
         "difficulty": 0,
         "points": 0

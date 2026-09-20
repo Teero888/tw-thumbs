@@ -9126,6 +9126,15 @@
     "points": 0
   },
   {
+    "name": "Auto Maze",
+    "repo": "ddnet",
+    "map_path": "types/fun/maps/Auto Maze.map",
+    "thumbnail_path": "ddnet/Auto Maze.png",
+    "type": "Fun",
+    "difficulty": 0,
+    "points": 0
+  },
+  {
     "name": "Avoid",
     "repo": "ddnet",
     "map_path": "types/fun/maps/Avoid.map",
