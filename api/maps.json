@@ -2718,6 +2718,15 @@
     "points": 21
   },
   {
+    "name": "Shortcut",
+    "repo": "ddnet",
+    "map_path": "types/brutal/maps/Shortcut.map",
+    "thumbnail_path": "ddnet/Shortcut.png",
+    "type": "Brutal",
+    "difficulty": 4,
+    "points": 27
+  },
+  {
     "name": "Simple Down 2",
     "repo": "ddnet",
     "map_path": "types/brutal/maps/Simple Down 2.map",
