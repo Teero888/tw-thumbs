@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-27T04:04:08.933768+00:00",
+  "updated_at": "2026-09-27T10:25:45.314583+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2427,
+    "ddnet": 2428,
     "unique": 641,
     "kog": 1094,
-    "total": 4162
+    "total": 4163
   },
   "maps": {
     "ddnet": [
@@ -7580,6 +7580,15 @@
         "type": "Dummy",
         "difficulty": 5,
         "points": 30
+      },
+      {
+        "name": "DeepFrost",
+        "repo": "ddnet",
+        "map_path": "types/dummy/maps/DeepFrost.map",
+        "thumbnail_path": "ddnet/DeepFrost.png",
+        "type": "Dummy",
+        "difficulty": 4,
+        "points": 25
       },
       {
         "name": "Desert Dog",
