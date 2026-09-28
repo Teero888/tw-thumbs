@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-28T04:05:19.156253+00:00",
+  "updated_at": "2026-09-28T11:31:05.910237+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2428,
+    "ddnet": 2429,
     "unique": 641,
     "kog": 1094,
-    "total": 4163
+    "total": 4164
   },
   "maps": {
     "ddnet": [
@@ -9215,6 +9215,15 @@
         "repo": "ddnet",
         "map_path": "types/fun/maps/Avoid.map",
         "thumbnail_path": "ddnet/Avoid.png",
+        "type": "Fun",
+        "difficulty": 0,
+        "points": 0
+      },
+      {
+        "name": "Blackjack",
+        "repo": "ddnet",
+        "map_path": "types/fun/maps/Blackjack.map",
+        "thumbnail_path": "ddnet/Blackjack.png",
         "type": "Fun",
         "difficulty": 0,
         "points": 0

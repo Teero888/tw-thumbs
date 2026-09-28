@@ -9162,6 +9162,15 @@
     "points": 0
   },
   {
+    "name": "Blackjack",
+    "repo": "ddnet",
+    "map_path": "types/fun/maps/Blackjack.map",
+    "thumbnail_path": "ddnet/Blackjack.png",
+    "type": "Fun",
+    "difficulty": 0,
+    "points": 0
+  },
+  {
     "name": "Bowling",
     "repo": "ddnet",
     "map_path": "types/fun/maps/Bowling.map",
