@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-03T22:45:01.767290+00:00",
+  "updated_at": "2026-10-04T04:41:50.915913+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2429,
+    "ddnet": 2430,
     "unique": 641,
     "kog": 1094,
-    "total": 4164
+    "total": 4165
   },
   "maps": {
     "ddnet": [
@@ -3827,6 +3827,15 @@
         "type": "Brutal",
         "difficulty": 2,
         "points": 21
+      },
+      {
+        "name": "cutee",
+        "repo": "ddnet",
+        "map_path": "types/brutal/maps/cutee.map",
+        "thumbnail_path": "ddnet/cutee.png",
+        "type": "Brutal",
+        "difficulty": 5,
+        "points": 30
       },
       {
         "name": "dalbychsipivo",
