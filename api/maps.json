@@ -9378,6 +9378,15 @@
     "points": 0
   },
   {
+    "name": "TeeScore",
+    "repo": "ddnet",
+    "map_path": "types/fun/maps/TeeScore.map",
+    "thumbnail_path": "ddnet/TeeScore.png",
+    "type": "Fun",
+    "difficulty": 0,
+    "points": 0
+  },
+  {
     "name": "TeeTacToe",
     "repo": "ddnet",
     "map_path": "types/fun/maps/TeeTacToe.map",
