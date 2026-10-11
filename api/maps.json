@@ -8172,6 +8172,15 @@
     "points": 15
   },
   {
+    "name": "Push Me",
+    "repo": "ddnet",
+    "map_path": "types/dummy/maps/Push Me.map",
+    "thumbnail_path": "ddnet/Push Me.png",
+    "type": "Dummy",
+    "difficulty": 2,
+    "points": 15
+  },
+  {
     "name": "Push ur Dummy",
     "repo": "ddnet",
     "map_path": "types/dummy/maps/Push ur Dummy.map",

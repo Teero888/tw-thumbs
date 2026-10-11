@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-11T04:27:08.159474+00:00",
+  "updated_at": "2026-10-11T11:18:01.786343+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2431,
+    "ddnet": 2432,
     "unique": 641,
     "kog": 1094,
-    "total": 4166
+    "total": 4167
   },
   "maps": {
     "ddnet": [
@@ -8225,6 +8225,15 @@
         "repo": "ddnet",
         "map_path": "types/dummy/maps/Portalgeist.map",
         "thumbnail_path": "ddnet/Portalgeist.png",
+        "type": "Dummy",
+        "difficulty": 2,
+        "points": 15
+      },
+      {
+        "name": "Push Me",
+        "repo": "ddnet",
+        "map_path": "types/dummy/maps/Push Me.map",
+        "thumbnail_path": "ddnet/Push Me.png",
         "type": "Dummy",
         "difficulty": 2,
         "points": 15
