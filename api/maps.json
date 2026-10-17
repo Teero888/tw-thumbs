@@ -25801,6 +25801,13 @@
     "category": "Short"
   },
   {
+    "name": "run_short_autumn_evening",
+    "repo": "unique",
+    "map_path": "maps/run_short_autumn_evening.map",
+    "thumbnail_path": "unique/run_short_autumn_evening.png",
+    "category": "Short"
+  },
+  {
     "name": "run_short_blue",
     "repo": "unique",
     "map_path": "maps/run_short_blue.map",
