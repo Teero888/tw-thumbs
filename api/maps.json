@@ -2070,6 +2070,15 @@
     "points": 18
   },
   {
+    "name": "Midsummer Night",
+    "repo": "ddnet",
+    "map_path": "types/brutal/maps/Midsummer Night.map",
+    "thumbnail_path": "ddnet/Midsummer Night.png",
+    "type": "Brutal",
+    "difficulty": 3,
+    "points": 24
+  },
+  {
     "name": "Milthrid Core",
     "repo": "ddnet",
     "map_path": "types/brutal/maps/Milthrid Core.map",

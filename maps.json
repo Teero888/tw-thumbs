@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-18T03:23:48.133548+00:00",
+  "updated_at": "2026-10-18T09:23:49.357455+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2432,
+    "ddnet": 2433,
     "unique": 642,
     "kog": 1094,
-    "total": 4168
+    "total": 4169
   },
   "maps": {
     "ddnet": [
@@ -2126,6 +2126,15 @@
         "type": "Brutal",
         "difficulty": 1,
         "points": 18
+      },
+      {
+        "name": "Midsummer Night",
+        "repo": "ddnet",
+        "map_path": "types/brutal/maps/Midsummer Night.map",
+        "thumbnail_path": "ddnet/Midsummer Night.png",
+        "type": "Brutal",
+        "difficulty": 3,
+        "points": 24
       },
       {
         "name": "Milthrid Core",
