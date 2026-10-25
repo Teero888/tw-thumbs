@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-25T03:33:02.484567+00:00",
+  "updated_at": "2026-10-25T09:38:31.294037+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2433,
+    "ddnet": 2434,
     "unique": 642,
     "kog": 1094,
-    "total": 4169
+    "total": 4170
   },
   "maps": {
     "ddnet": [
@@ -19709,6 +19709,15 @@
         "repo": "ddnet",
         "map_path": "types/solo/maps/Jungler.map",
         "thumbnail_path": "ddnet/Jungler.png",
+        "type": "Solo",
+        "difficulty": 2,
+        "points": 8
+      },
+      {
+        "name": "Just DoubleJump",
+        "repo": "ddnet",
+        "map_path": "types/solo/maps/Just DoubleJump.map",
+        "thumbnail_path": "ddnet/Just DoubleJump.png",
         "type": "Solo",
         "difficulty": 2,
         "points": 8

@@ -19656,6 +19656,15 @@
     "points": 8
   },
   {
+    "name": "Just DoubleJump",
+    "repo": "ddnet",
+    "map_path": "types/solo/maps/Just DoubleJump.map",
+    "thumbnail_path": "ddnet/Just DoubleJump.png",
+    "type": "Solo",
+    "difficulty": 2,
+    "points": 8
+  },
+  {
     "name": "Just_Shotgun",
     "repo": "ddnet",
     "map_path": "types/solo/maps/Just_Shotgun.map",
