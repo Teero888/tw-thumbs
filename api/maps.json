@@ -15660,15 +15660,6 @@
     "points": 6
   },
   {
-    "name": "Killa 3",
-    "repo": "ddnet",
-    "map_path": "types/oldschool/maps/Killa 3.map",
-    "thumbnail_path": "ddnet/Killa 3.png",
-    "type": null,
-    "difficulty": null,
-    "points": null
-  },
-  {
     "name": "Killa1",
     "repo": "ddnet",
     "map_path": "types/oldschool/maps/Killa1.map",

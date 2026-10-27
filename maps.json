@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-27T04:00:59.411453+00:00",
+  "updated_at": "2026-10-27T10:17:10.470203+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2434,
+    "ddnet": 2433,
     "unique": 642,
     "kog": 1094,
-    "total": 4170
+    "total": 4169
   },
   "maps": {
     "ddnet": [
@@ -15716,15 +15716,6 @@
         "type": "Oldschool",
         "difficulty": 1,
         "points": 6
-      },
-      {
-        "name": "Killa 3",
-        "repo": "ddnet",
-        "map_path": "types/oldschool/maps/Killa 3.map",
-        "thumbnail_path": "ddnet/Killa 3.png",
-        "type": null,
-        "difficulty": null,
-        "points": null
       },
       {
         "name": "Killa1",
