@@ -15664,9 +15664,9 @@
     "repo": "ddnet",
     "map_path": "types/oldschool/maps/Killa 3.map",
     "thumbnail_path": "ddnet/Killa 3.png",
-    "type": "Oldschool",
-    "difficulty": 2,
-    "points": 12
+    "type": null,
+    "difficulty": null,
+    "points": null
   },
   {
     "name": "Killa1",

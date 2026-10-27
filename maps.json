@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-26T20:21:51.194935+00:00",
+  "updated_at": "2026-10-27T04:00:59.411453+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -15722,9 +15722,9 @@
         "repo": "ddnet",
         "map_path": "types/oldschool/maps/Killa 3.map",
         "thumbnail_path": "ddnet/Killa 3.png",
-        "type": "Oldschool",
-        "difficulty": 2,
-        "points": 12
+        "type": null,
+        "difficulty": null,
+        "points": null
       },
       {
         "name": "Killa1",
