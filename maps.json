@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-31T10:46:50.225578+00:00",
+  "updated_at": "2026-10-31T19:10:00.139742+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -51,9 +51,9 @@
   },
   "counts": {
     "ddnet": 2434,
-    "unique": 642,
+    "unique": 643,
     "kog": 1094,
-    "total": 4170
+    "total": 4171
   },
   "maps": {
     "ddnet": [
@@ -22124,6 +22124,13 @@
         "repo": "unique",
         "map_path": "maps/Run_4_TerraK.map",
         "thumbnail_path": "unique/Run_4_TerraK.png",
+        "category": "Short"
+      },
+      {
+        "name": "Run_4skizz",
+        "repo": "unique",
+        "map_path": "maps/Run_4skizz.map",
+        "thumbnail_path": "unique/Run_4skizz.png",
         "category": "Short"
       },
       {

@@ -22067,6 +22067,13 @@
     "category": "Short"
   },
   {
+    "name": "Run_4skizz",
+    "repo": "unique",
+    "map_path": "maps/Run_4skizz.map",
+    "thumbnail_path": "unique/Run_4skizz.png",
+    "category": "Short"
+  },
+  {
     "name": "Run_Block4Life",
     "repo": "unique",
     "map_path": "maps/Run_Block4Life.map",
