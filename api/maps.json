@@ -19683,6 +19683,15 @@
     "points": 4
   },
   {
+    "name": "Kidou",
+    "repo": "ddnet",
+    "map_path": "types/solo/maps/Kidou.map",
+    "thumbnail_path": "ddnet/Kidou.png",
+    "type": "Solo",
+    "difficulty": 2,
+    "points": 8
+  },
+  {
     "name": "Killstreak 1",
     "repo": "ddnet",
     "map_path": "types/solo/maps/Killstreak 1.map",
