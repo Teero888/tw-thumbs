@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-08T04:51:03.538138+00:00",
+  "updated_at": "2026-11-08T11:46:34.520865+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2434,
+    "ddnet": 2435,
     "unique": 643,
     "kog": 1094,
-    "total": 4171
+    "total": 4172
   },
   "maps": {
     "ddnet": [
@@ -14399,6 +14399,15 @@
         "repo": "ddnet",
         "map_path": "types/novice/maps/Sketch.map",
         "thumbnail_path": "ddnet/Sketch.png",
+        "type": "Novice",
+        "difficulty": 5,
+        "points": 5
+      },
+      {
+        "name": "Sono",
+        "repo": "ddnet",
+        "map_path": "types/novice/maps/Sono.map",
+        "thumbnail_path": "ddnet/Sono.png",
         "type": "Novice",
         "difficulty": 5,
         "points": 5

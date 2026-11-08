@@ -14346,6 +14346,15 @@
     "points": 5
   },
   {
+    "name": "Sono",
+    "repo": "ddnet",
+    "map_path": "types/novice/maps/Sono.map",
+    "thumbnail_path": "ddnet/Sono.png",
+    "type": "Novice",
+    "difficulty": 5,
+    "points": 5
+  },
+  {
     "name": "Sopella",
     "repo": "ddnet",
     "map_path": "types/novice/maps/Sopella.map",
