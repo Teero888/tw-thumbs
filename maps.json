@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-13T12:56:06.584991+00:00",
+  "updated_at": "2026-11-13T21:15:48.890582+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -51,9 +51,9 @@
   },
   "counts": {
     "ddnet": 2435,
-    "unique": 643,
+    "unique": 644,
     "kog": 1094,
-    "total": 4172
+    "total": 4173
   },
   "maps": {
     "ddnet": [
@@ -22288,6 +22288,13 @@
         "map_path": "maps/bonny.map",
         "thumbnail_path": "unique/bonny.png",
         "category": "Short"
+      },
+      {
+        "name": "cotd_abridged",
+        "repo": "unique",
+        "map_path": "maps/cotd_abridged.map",
+        "thumbnail_path": "unique/cotd_abridged.png",
+        "category": "Middle"
       },
       {
         "name": "ctf1",

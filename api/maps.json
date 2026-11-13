@@ -22230,6 +22230,13 @@
     "category": "Short"
   },
   {
+    "name": "cotd_abridged",
+    "repo": "unique",
+    "map_path": "maps/cotd_abridged.map",
+    "thumbnail_path": "unique/cotd_abridged.png",
+    "category": "Middle"
+  },
+  {
     "name": "ctf1",
     "repo": "unique",
     "map_path": "maps/ctf1.map",
