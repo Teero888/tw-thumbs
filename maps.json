@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-15T05:11:19.476828+00:00",
+  "updated_at": "2026-11-15T16:52:40.372734+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2435,
+    "ddnet": 2437,
     "unique": 644,
     "kog": 1094,
-    "total": 4173
+    "total": 4175
   },
   "maps": {
     "ddnet": [
@@ -15961,6 +15961,15 @@
         "points": 12
       },
       {
+        "name": "LongCat 2",
+        "repo": "ddnet",
+        "map_path": "types/oldschool/maps/LongCat 2.map",
+        "thumbnail_path": "ddnet/LongCat 2.png",
+        "type": "Oldschool",
+        "difficulty": 1,
+        "points": 6
+      },
+      {
         "name": "LongCat",
         "repo": "ddnet",
         "map_path": "types/oldschool/maps/LongCat.map",
@@ -16697,6 +16706,15 @@
         "type": "Oldschool",
         "difficulty": 2,
         "points": 12
+      },
+      {
+        "name": "VeryLongCat",
+        "repo": "ddnet",
+        "map_path": "types/oldschool/maps/VeryLongCat.map",
+        "thumbnail_path": "ddnet/VeryLongCat.png",
+        "type": "Oldschool",
+        "difficulty": 1,
+        "points": 6
       },
       {
         "name": "Victory 1",

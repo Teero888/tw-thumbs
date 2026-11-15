@@ -15903,6 +15903,15 @@
     "points": 12
   },
   {
+    "name": "LongCat 2",
+    "repo": "ddnet",
+    "map_path": "types/oldschool/maps/LongCat 2.map",
+    "thumbnail_path": "ddnet/LongCat 2.png",
+    "type": "Oldschool",
+    "difficulty": 1,
+    "points": 6
+  },
+  {
     "name": "LongCat",
     "repo": "ddnet",
     "map_path": "types/oldschool/maps/LongCat.map",
@@ -16639,6 +16648,15 @@
     "type": "Oldschool",
     "difficulty": 2,
     "points": 12
+  },
+  {
+    "name": "VeryLongCat",
+    "repo": "ddnet",
+    "map_path": "types/oldschool/maps/VeryLongCat.map",
+    "thumbnail_path": "ddnet/VeryLongCat.png",
+    "type": "Oldschool",
+    "difficulty": 1,
+    "points": 6
   },
   {
     "name": "Victory 1",
