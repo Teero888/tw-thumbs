@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-22T00:09:24.005310+00:00",
+  "updated_at": "2026-11-22T13:09:01.935711+00:00",
   "resolution": "1280x720",
   "types": {
     "ddnet": [
@@ -50,10 +50,10 @@
     ]
   },
   "counts": {
-    "ddnet": 2438,
+    "ddnet": 2439,
     "unique": 644,
     "kog": 1094,
-    "total": 4176
+    "total": 4177
   },
   "maps": {
     "ddnet": [
@@ -2612,6 +2612,15 @@
         "type": "Brutal",
         "difficulty": 3,
         "points": 24
+      },
+      {
+        "name": "Reef",
+        "repo": "ddnet",
+        "map_path": "types/brutal/maps/Reef.map",
+        "thumbnail_path": "ddnet/Reef.png",
+        "type": "Brutal",
+        "difficulty": 4,
+        "points": 27
       },
       {
         "name": "Regen 3",

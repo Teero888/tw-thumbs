@@ -2556,6 +2556,15 @@
     "points": 24
   },
   {
+    "name": "Reef",
+    "repo": "ddnet",
+    "map_path": "types/brutal/maps/Reef.map",
+    "thumbnail_path": "ddnet/Reef.png",
+    "type": "Brutal",
+    "difficulty": 4,
+    "points": 27
+  },
+  {
     "name": "Regen 3",
     "repo": "ddnet",
     "map_path": "types/brutal/maps/Regen 3.map",
